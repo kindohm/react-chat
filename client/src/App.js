@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import io from 'socket.io-client';
 
 class App extends Component {
 
   componentDidMount() {
-    this.search();
+    this.message();
   }
 
-  search() {
-    console.log("searching");
-    return fetch(`/api/hank`, {
-      accept: 'application/json',
-    }).then((response) => {
-      return response.json();    
-    }).then(json => {
-      console.log(json);
+  message() {
+    const socket = io({
+      path: '/chat'
+    }).connect('/');
+
+    socket.on('news', function (data) {
+      console.log("received data", data);
+      socket.emit('my other event', { my: 'data' });
     });
+    
   }
 
   render() {

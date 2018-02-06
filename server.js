@@ -1,10 +1,22 @@
-const express = require('express')
-const app = express()
+var app = require('express')();
+var server = require('http').Server(app);
 
-app.get("/api/hank", (req, res) => {
-    res.send({ name: "HANK" });
+
+const io = require('socket.io')(server, {
+    path: '/chat',
+    serveClient: false,
+    // below are engine.IO options
+    pingInterval: 10000,
+    pingTimeout: 5000,
+    cookie: false
 });
 
-// app.set("port", process.env.PORT || 3001);
+server.listen(3001);
 
-app.listen(3001, () => console.log('Example app listening on port 3001!'))
+io.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+        console.log("received data", data);
+        socket.s
+    });
+});
