@@ -2,6 +2,7 @@ const app = require('express')();
 const bodyParser = require('body-parser');
 const server = require('http').Server(app);
 const uuidv1 = require('uuid/v1');
+const _ = require('lodash');
 
 const io = require('socket.io')(server, {
     path: '/chat',
@@ -12,7 +13,7 @@ const io = require('socket.io')(server, {
     cookie: false
 });
 
-const rooms = [{ id: uuidv1(), name: "general" }];
+const rooms = [{ id: uuidv1(), name: 'general' }, {id: uuidv1(), name: 'specific'}];
 
 app.use(bodyParser.json());
 
@@ -23,10 +24,15 @@ app.get('/api/rooms', (req, res) => {
 app.post('/api/rooms', (req, res) => {
 
     let room = req.body;
+
+    if (_.some(rooms, r => r.name === room.name)){
+        return res.status(400).send();
+    }
+
     room.id = uuidv1();
     rooms.push(room);
 
-    res.status(200).send(room);
+    return res.status(201).send(room);
 
 });
 

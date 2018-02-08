@@ -4,8 +4,10 @@
   "description": "fun chat implementation in react",
   "repository": "https://github.com/kindohm/react-chat",
   "dependencies": {
+    "create-react-class": "^15.6.3",
     "express": "4.16.2",
     "express-ws": "3.0.0",
+    "lodash": "^4.17.5",
     "socket.io": "^2.0.4",
     "uuid": "^3.2.1"
   },
